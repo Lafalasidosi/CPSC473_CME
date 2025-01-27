@@ -21,11 +21,11 @@ def find_frequent_1_itemsets(filename):
     # TODO: comment this assignment out or remove entirely once method implemented in full
     filename = "a1-resources/retail.txt"
     
-    counts = pd.DataFrame.from_dict(dict({}))
+    counts = pd.DataFrame.from_dict(dict({"Item": [], "Count": []}))
     data_file = open(filename)
     
-    while (data_file.readline()):
-        items = data_file.readline().split()[2:]
+    while (data_file.readline()):   # skips first line
+        items = data_file.peekline().split()[2:]    # itemset portion of transaction
         for entry in items:
             int_rep = int(entry)
             
@@ -33,7 +33,7 @@ def find_frequent_1_itemsets(filename):
     
 
 # Returns the current line of a given file
-def peek(f):
+def peekline(f):
     pos = f.tell()          # set  'pos' to current reader location
     result = f.readline()   # read whole line--reader advances to next line
     f.seek(pos)             # set reader to where it was before the call to readline()
