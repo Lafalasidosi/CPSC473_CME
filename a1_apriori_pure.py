@@ -1,8 +1,8 @@
 import pandas as pd
 import sys
 
-D = pd.read_csv("a1-resources/retail.txt")
-min_sup = sys.argv[2] / 100.0 * len(D)
+
+#min_sup = sys.argv[2] / 100.0 * len(D)
 
 
 
@@ -19,15 +19,21 @@ def find_frequent_1_itemsets(filename):
     # if it doesn't already exist in a DataFrame, add it with a count of 1.
     
     # TODO: comment this assignment out or remove entirely once method implemented in full
-    filename = "a1-resources/retail.txt"
+    #filename = "retail-head.txt"
     
-    counts = pd.DataFrame.from_dict(dict({"Item": [], "Count": []}))
+    counts = {}
     data_file = open(filename)
-    
     while (data_file.readline()):   # skips first line
-        items = data_file.peekline().split()[2:]    # itemset portion of transaction
+        items = peekline(data_file).split()[2:]    # itemset portion of transaction
         for entry in items:
-            int_rep = int(entry)
+                entry = int(entry)
+                count = counts.get(entry)
+                if (count == None):
+                        counts.update([(entry, 1)])
+                else:
+                        counts.update([(entry, int(count) + 1)])
+    print(counts)
+                
             
         
     
@@ -38,3 +44,6 @@ def peekline(f):
     result = f.readline()   # read whole line--reader advances to next line
     f.seek(pos)             # set reader to where it was before the call to readline()
     return result           # return result of earlier read
+
+find_frequent_1_itemsets("a1-resources/retail-head.txt")
+
