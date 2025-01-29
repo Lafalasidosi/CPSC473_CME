@@ -14,11 +14,20 @@ transactions = []
 for line in file:
     line = line.replace('\n', '')
     transactions.append(re.split(r'\t| +', line))
-print(transactions[0][0])
+#print(transactions[0][0])
 #container for all initial single candidates and how many times they happen in total for all transactions
 single_candidates = {}
 for transaction in transactions[1:]:
     for item in transaction[2:]:
         single_candidates[item] = single_candidates.get(item,0) + 1
+#Set the support count to be based on the minimum support times the total # of transactions
+support_count = min_support * int(transaction[0][0])
+#Setting initial itemsets
+frequent_itemsets = {}
+for item, count in single_candidates.items():
+    if(count >= support_count):
+        frequent_itemsets[frozenset([item])] = count
+#set initial start to look for pairs
+k = 2
 
-print(single_candidates)
+print(str(frequent_itemsets).replace('frozenset', ''))
