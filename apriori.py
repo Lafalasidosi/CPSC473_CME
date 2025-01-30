@@ -29,5 +29,39 @@ for item, count in single_candidates.items():
         frequent_itemsets[frozenset([item])] = count
 #set initial start to look for pairs
 k = 2
+#This loop goes through all candidates and weeds out any candidates that don't meet MST. Once there are no more itemsets that meet MST, it will break out of the loop.
+while True:
+    #dictionary of total candidates for the dataset.
+    total_candidates = {}
+    current_itemsets = list(frequent_itemsets.keys())
+    #make initial candidate list by forming unions looping through the itemset. If the number of items in an itemset matches our k value, then it will be kept and initial count set to 0.
+    for i in range(len(current_itemsets)):
+        for j in range(i + 1, len(current_itemsets)):
+            set_union = current_itemsets[i].union(current_itemsets[j])
+            if len(set_union) == k:
+                total_candidates[set_union] = 0
+    
+    for transaction in transactions[1:]:
+        for candidate in total_candidates:
+            #check if candidate is a subset of transactions. If so, increment total candidates
+            if candidate.issubset(transaction):
+                total_candidates[candidate] += 1
+    #Update the frequent itemset by first looping through candidates and seeing if an itemset's count is >= the minimum support count. If so, update itemset's count and add it to frequent_itemsets.
+    for itemset, count in total_candidates.items():
+        if count >= support_count:
+            total_candidates[itemset] = count
+            # add new itemsets to frequent itemsets
+            frequent_itemsets.update(total_candidates)
+    
+    #if no candidates are frequent, leave loop
+    if not total_candidates:
+        break
 
-print(str(frequent_itemsets).replace('frozenset', ''))
+    #increment number of items per itemset to look at
+    k += 1
+#Remove any itemsets that don't meet MST. For some reason, this doesn't happen in while-loop, and needs to be done again here.
+final_frequent_itemset = {}
+for item, count in frequent_itemsets.items():
+    if count >= support_count:
+        final_frequent_itemset[item] = count
+print(str(final_frequent_itemset).replace("frozenset", ""))
