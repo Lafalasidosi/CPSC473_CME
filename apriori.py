@@ -1,5 +1,6 @@
 import sys
 import re
+from math import ceil
 #File and min_support will be whatever is taken in as command line input
 try:
     file = open(sys.argv[1], 'r')
@@ -21,7 +22,7 @@ for transaction in transactions[1:]:
     for item in transaction[2:]:
         single_candidates[item] = single_candidates.get(item,0) + 1
 #Set the support count to be based on the minimum support times the total # of transactions
-support_count = min_support * int(transaction[0][0])
+support_count = ceil(min_support * int(transaction[0][0]))
 #Setting initial itemsets
 frequent_itemsets = {}
 for item, count in single_candidates.items():
@@ -64,4 +65,5 @@ final_frequent_itemset = {}
 for item, count in frequent_itemsets.items():
     if count >= support_count:
         final_frequent_itemset[item] = count
+print(support_count)
 print(str(final_frequent_itemset).replace("frozenset", ""))
