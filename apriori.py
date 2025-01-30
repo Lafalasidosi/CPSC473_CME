@@ -38,8 +38,8 @@ while True:
     #make initial candidate list by forming unions looping through the itemset. If the number of items in an itemset matches our k value, then it will be kept and initial count set to 0.
     for i in range(len(current_itemsets)):
         for j in range(i + 1, len(current_itemsets)):
-            set_union = current_itemsets[i].union(current_itemsets[j])
-            if len(set_union) == k:
+            set_union = current_itemsets[i] | current_itemsets[j]
+            if len(set_union) == k and all(subset in frequent_itemsets for subset in map(frozenset, set_union)):
                 total_candidates[set_union] = 0
     
     for transaction in transactions[1:]:
