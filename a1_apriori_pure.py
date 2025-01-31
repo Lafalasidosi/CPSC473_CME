@@ -1,12 +1,13 @@
-import pandas as pd
 import sys
 
-
-#min_sup = sys.argv[2] / 100.0 * len(D)
-# e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
-
-
-
+def main():
+    #min_sup = sys.argv[2] / 100.0 * len(D)
+    # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
+    
+    L_sets = []
+    L_sets.append([])
+    L1 = find_frequent_1_itemsets("a1-resources/retail.txt", 44081)
+    L_sets.append(L1)
 
 
 def find_frequent_1_itemsets(filename, min_sup):    
@@ -29,9 +30,6 @@ def find_frequent_1_itemsets(filename, min_sup):
     return has_min_sup
                 
             
-        
-    
-
 # Returns the current line of a given file
 def peekline(f):
     pos = f.tell()          # set  'pos' to current reader location
@@ -39,5 +37,6 @@ def peekline(f):
     f.seek(pos)             # set reader to where it was before the call to readline()
     return result           # return result of earlier read
 
-find_frequent_1_itemsets("a1-resources/retail.txt", 44081)
 
+if __name__ == '__main__':
+    main()
