@@ -6,7 +6,7 @@ def main():
     
     L_sets = []
     L_sets.append([])
-    L1 = find_frequent_1_itemsets("a1-resources/retail.txt", 44081)
+    L1 = find_frequent_1_itemsets("a1-resources/retail.txt", 20000)
     L_sets.append(L1)
 
 
@@ -22,6 +22,7 @@ def get_counts(filename):
                         result.update([(entry, 1)]) # so add it with a count of 1
                 else:                               # otherwise, increment the value that's already there
                         result.update([(entry, int(count) + 1)])
+    return result
 
 
 def find_frequent_1_itemsets(filename, min_sup):    
