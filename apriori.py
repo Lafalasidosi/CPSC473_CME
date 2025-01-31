@@ -12,6 +12,7 @@ except:
 #Transactions will be a 2d array that will contain all the transaction data from the file
 transactions = []
 #For loop to add each line of the file to the Transactions 2d-array
+
 for line in file:
     line = line.replace('\n', '')
     transactions.append(re.split(r'\t| +', line))
