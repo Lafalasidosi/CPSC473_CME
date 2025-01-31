@@ -1,15 +1,53 @@
 import sys
+from itertools import chain, combinations
 
 def main():
     #min_sup = sys.argv[2] / 100.0 * len(D)
     # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
+    file = sys.argv[1]
+    min_support = int(sys.argv[2]) / 100
     
     L_sets = []
     L_sets.append([])
-    L1 = find_frequent_1_itemsets("a1-resources/retail.txt", 20000)
+    L1 = find_frequent_1_itemsets(file, min_support)
     L_sets.append(L1)
+    #Remove first list, as it is only an empty list
+    del L_sets[0]
+    print(L_sets)
 
 
+def apriori_gen(prev_L, set_size):
+     candidates_k = []
+     c = ()
+     for l1 in prev_L:
+          for l2 in prev_L:
+               if l1[set_size - 1] < l2[set_size - 1]:
+                   c = l1 + l2 
+                
+               if has_infrequent_subset(c, prev_L):
+                    del c
+               else:
+                    candidates_k.append(c)
+
+     return candidates_k
+
+
+def has_infrequent_subset(c, k, prev_L):
+    power_sets = get_powerset(c, k-1)
+    for s in power_sets:
+         if s not in prev_L:
+              return True
+         else:
+              return False
+
+def find_frequent_1_itemsets(filename, min_sup):    
+    counts = get_counts(filename)                 
+    has_min_sup = []
+    for x in counts:
+        if counts.get(x) >= min_sup:
+            has_min_sup.append((x, counts.get(x)))
+    return has_min_sup
+                
 def get_counts(filename):
     result = {}                     
     data_file = open(filename)      
@@ -23,16 +61,6 @@ def get_counts(filename):
                 else:                               # otherwise, increment the value that's already there
                         result.update([(entry, int(count) + 1)])
     return result
-
-
-def find_frequent_1_itemsets(filename, min_sup):    
-    counts = get_counts(filename)                 
-    has_min_sup = []
-    for x in counts:
-        if counts.get(x) > min_sup:
-            has_min_sup.append((x, counts.get(x)))
-    return has_min_sup
-                
             
 # Returns the current line of a given file
 def peekline(f):
@@ -41,6 +69,9 @@ def peekline(f):
     f.seek(pos)             # set reader to where it was before the call to readline()
     return result           # return result of earlier read
 
-
+#function that will return a list of powersets for a set. The start parameter is the size of combinations it will start with
+def get_powerset(item_set, start):
+     output = list(item_set)
+     return chain.from_iterable(combinations(output,r) for r in range(start, len(output) + 1))
 if __name__ == '__main__':
     main()
