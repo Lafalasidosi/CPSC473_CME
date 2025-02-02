@@ -11,6 +11,10 @@ def main():
     L_sets.append([])
     L1 = find_frequent_1_itemsets(file, min_support)
     L_sets.append(L1)
+    k = 2
+    while L_sets[k-1]:
+         C_k = apriori_gen(L_sets, k-1)
+         L_sets.append(C_k)
     #Remove first list, as it is only an empty list
     del L_sets[0]
     print(L_sets)
@@ -21,7 +25,7 @@ def apriori_gen(prev_L, set_size):
      c = ()
      for l1 in prev_L:
           for l2 in prev_L:
-               if l1[set_size - 1] < l2[set_size - 1]:
+               if len(l1) > set_size and len(l2) > set_size and l1[set_size - 1] < l2[set_size - 1]:
                    c = l1 + l2 
                 
                if has_infrequent_subset(c, prev_L):
@@ -32,8 +36,8 @@ def apriori_gen(prev_L, set_size):
      return candidates_k
 
 
-def has_infrequent_subset(c, k, prev_L):
-    power_sets = get_powerset(c, k-1)
+def has_infrequent_subset(c, prev_L):
+    power_sets = get_powerset(c)
     for s in power_sets:
          if s not in prev_L:
               return True
@@ -70,8 +74,8 @@ def peekline(f):
     return result           # return result of earlier read
 
 #function that will return a list of powersets for a set. The start parameter is the size of combinations it will start with
-def get_powerset(item_set, start):
+def get_powerset(item_set):
      output = list(item_set)
-     return chain.from_iterable(combinations(output,r) for r in range(start, len(output) + 1))
+     return chain.from_iterable(combinations(output,r) for r in range(len(output) + 1))
 if __name__ == '__main__':
     main()
