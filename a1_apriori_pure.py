@@ -15,34 +15,46 @@ def main():
     while L_sets[k-1]:
          C_k = apriori_gen(L_sets, k-1)
          L_sets.append(C_k)
+
+         k += 1
     #Remove first list, as it is only an empty list
     del L_sets[0]
-    print(L_sets)
+    del L_sets[-1]
+ #   print(L_sets)
 
 
 def apriori_gen(prev_L, set_size):
      candidates_k = []
      c = ()
-     for l1 in prev_L:
-          for l2 in prev_L:
-               if l1[set_size - 1] < l2[set_size - 1]:
-                   c = l1 + l2 
-                
-               if has_infrequent_subset(c, prev_L):
-                    del c
-               else:
+     for i in range(len(prev_L)):
+        for j in range(i+1, len(prev_L)):
+            l1 = prev_L[i]
+            l2 = prev_L[j]
+            print(l1)
+            print(l2)
+            #Check if all elements up to, but not including, the last element in the sets are equal to ensure good merge
+            if l1[:-1] == l2[:-1]:
+                c = l1 + (l2[-1])
+            else:
+                continue
+    
+            if not has_infrequent_subset(c, prev_L):
                     candidates_k.append(c)
+                    #del c
+            else:
+                    pass
+                    #candidates_k.append(c)
 
      return candidates_k
 
 
 def has_infrequent_subset(c, prev_L):
-    power_sets = get_powerset(c)
-    for s in power_sets:
+    for s in combinations(c, len(c) - 1):
          if s not in prev_L:
               return True
          else:
-              return False
+            continue
+    return False
 
 def find_frequent_1_itemsets(filename, min_sup):    
     counts = get_counts(filename)                 
