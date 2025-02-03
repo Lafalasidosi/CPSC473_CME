@@ -25,7 +25,7 @@ def apriori_gen(prev_L, set_size):
      c = ()
      for l1 in prev_L:
           for l2 in prev_L:
-               if len(l1) > set_size and len(l2) > set_size and l1[set_size - 1] < l2[set_size - 1]:
+               if l1[set_size - 1] < l2[set_size - 1]:
                    c = l1 + l2 
                 
                if has_infrequent_subset(c, prev_L):
