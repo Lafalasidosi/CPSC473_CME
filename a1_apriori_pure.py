@@ -6,10 +6,12 @@ def main():
     #min_sup = sys.argv[2] / 100.0 * len(D)
     # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
     file = sys.argv[1]
+    #Uses linecache.getline to read the first line in our input file (the number of transactions) and then converts to an int
     D = int(linecache.getline(file, 1))
-    print(D)
+    print(f'Number of transactions: {D}')
+    #Calculate minimum support based on user inputted percentage and the number of transactions
     min_support = (int(sys.argv[2]) / 100) * D
-    print(min_support)
+    print(f'minumum support: {min_support}')
     L_sets = []
     L1 = find_frequent_1_itemsets(file, min_support)
     print("L1: ", L1)
@@ -27,41 +29,7 @@ def main():
             running = False
 
         k += 1
-    #Remove first list and last list, as they are only empty lists
-    # del L_sets[0]
-    # del L_sets[-1]
-    # print(f'before: {L_sets}')
-    # #Goes through L_sets and deletes anything that doesn't meet minimum support
-    # for i in range(len(L_sets)):
-    #      for j in range(len(L_sets[i]) - 1, -1, -1):
-    #           if L_sets[i][j][-1] < min_support:
-    #                del L_sets[i][j]
-    # print(f'after: {L_sets}')
     print("final: ", L_sets)
-def apriori_gen(prev_L):
-     candidates_k = []
-     c = ()
-     itemsets = [x[0] for x in prev_L]
-     for i in range(len(itemsets)):
-        for j in range(i+1, len(itemsets)):
-            l1 = itemsets[i]
-            l2 = itemsets[j]
-            #Check if all elements up to, but not including, the last element in the sets are equal to ensure good merge
-            if l1[:-1] == l2[:-1]:
-                c = l1 + (l2[-1],)
-                candidates_k.append((c, 0))
-                #If c has infrequent subsets within it, then c will be deleted. Otherwise, append it to candidates_k
-               
-               # if has_infrequent_subset(c):
-               #         del c
-               #         continue
-               #         #candidates_k.append((c, 0))
-               # else:
-               #      candidates_k.append((c, 0))
-                     #del c
-     
-     return candidates_k
-
 
 def has_infrequent_subset(c):
     pass
