@@ -31,9 +31,6 @@ def main():
         k += 1
     print("final: ", L_sets)
 
-def has_infrequent_subset(c):
-    pass
-
 def find_frequent_1_itemsets(filename, min_sup):    
     counts = get_counts(filename)                 
     has_min_sup = []
