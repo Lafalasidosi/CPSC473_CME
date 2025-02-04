@@ -1,5 +1,5 @@
 import sys
-from itertools import chain, combinations
+from itertools import combinations
 
 global L_sets
 
@@ -10,7 +10,7 @@ def main():
     D_name = "a1-resources/retail.txt"
     D = open(D_name)
     min_sup = 15.0 / 100.0 * 88162
-    L = [set()]   
+    L = [set()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
     C = [set(), set()]  # TODO: need to make these dicts; they store both an itemset and its count
     L1 = find_frequent_1_itemsets(D_name, 10000)
     L.append(L1)
@@ -23,6 +23,7 @@ def main():
             for c, count in C_t:
                 C_t.update({c, count+1})
         k += 1
+        # this line below will change from L.append... to L.update... etc.
         L.append(set([c for c in C_t if C_t.get(c) >= min_sup])) 
         print(L[-1])
     for L in L:
@@ -85,7 +86,7 @@ def all_equal_except_last(l1, l2):
     return l1[length-1] < l2[length-1]
     
 
-def apriori_gen(L_prev, k):
+def apriori_gen(L_prev, k): # TODO: refactor to ise C_k as a dict; L_prev should be dict at this point
     C_k = []
     for l1 in L_prev:
         for l2 in L_prev:
@@ -105,7 +106,7 @@ def k_powersets(item_set, k):
 
 def has_infrequent_subset(candidate, L_prev, k):
     for s in k_powersets(candidate):
-        if s not in L_prev: #TODO: should not everything be done with dicts?
+        if s not in L_prev: #TODO: shouldn't everything be done with dicts?
             return True
     return False
 
