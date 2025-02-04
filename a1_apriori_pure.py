@@ -13,55 +13,55 @@ def main():
     L_sets.append(L1)
     k = 2
     while L_sets[k-1]:
-         C_k = apriori_gen(L_sets, k-1)
+         C_k = apriori_gen(L_sets[k-1])
          L_sets.append(C_k)
 
          k += 1
-    #Remove first list, as it is only an empty list
+    #Remove first list and last list, as they are only empty lists
     del L_sets[0]
     del L_sets[-1]
- #   print(L_sets)
+    print(f'before: {L_sets}')
+    #Goes through L_sets and deletes anything that doesn't meet minimum support
+    for i in range(len(L_sets)):
+         for j in range(len(L_sets[i]) - 1, -1, -1):
+              if L_sets[i][j][-1] < min_support:
+                   del L_sets[i][j]
+    print(f'after: {L_sets}')
 
-
-def apriori_gen(prev_L, set_size):
+def apriori_gen(prev_L):
      candidates_k = []
      c = ()
-     for i in range(len(prev_L)):
-        for j in range(i+1, len(prev_L)):
-            l1 = prev_L[i]
-            l2 = prev_L[j]
-            print(l1)
-            print(l2)
+     itemsets = [x[0] for x in prev_L]
+     for i in range(len(itemsets)):
+        for j in range(i+1, len(itemsets)):
+            l1 = itemsets[i]
+            l2 = itemsets[j]
             #Check if all elements up to, but not including, the last element in the sets are equal to ensure good merge
             if l1[:-1] == l2[:-1]:
-                c = l1 + (l2[-1])
-            else:
-                continue
-    
-            if not has_infrequent_subset(c, prev_L):
-                    candidates_k.append(c)
-                    #del c
-            else:
-                    pass
-                    #candidates_k.append(c)
-
+                c = l1 + (l2[-1],)
+                candidates_k.append((c, 0))
+                #If c has infrequent subsets within it, then c will be deleted. Otherwise, append it to candidates_k
+               
+               # if has_infrequent_subset(c):
+               #         del c
+               #         continue
+               #         #candidates_k.append((c, 0))
+               # else:
+               #      candidates_k.append((c, 0))
+                     #del c
+     
      return candidates_k
 
 
-def has_infrequent_subset(c, prev_L):
-    for s in combinations(c, len(c) - 1):
-         if s not in prev_L:
-              return True
-         else:
-            continue
-    return False
+def has_infrequent_subset(c):
+    pass
 
 def find_frequent_1_itemsets(filename, min_sup):    
     counts = get_counts(filename)                 
     has_min_sup = []
     for x in counts:
-        if counts.get(x) >= min_sup:
-            has_min_sup.append((x, counts.get(x)))
+         if counts[x] >= min_sup:
+              has_min_sup.append(((x,), counts[x]))
     return has_min_sup
                 
 def get_counts(filename):
