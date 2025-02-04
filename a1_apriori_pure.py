@@ -23,7 +23,6 @@ def main():
         k += 1
         # this line below will change from L.append... to L.update... etc.
         L.append(set([c for c in C_t if C_t.get(c) >= min_sup])) 
-        print(L[-1])
     for L in L:
         print(L)
     
