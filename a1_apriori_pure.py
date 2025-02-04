@@ -1,5 +1,5 @@
 import sys
-from itertools import chain, combinations
+from math import ceil
 import linecache
 
 def main():
@@ -10,7 +10,7 @@ def main():
     D = int(linecache.getline(file, 1))
     print(f'Number of transactions: {D}')
     #Calculate minimum support based on user inputted percentage and the number of transactions
-    min_support = (int(sys.argv[2]) / 100) * D
+    min_support = ceil((int(sys.argv[2]) / 100) * D)
     print(f'minumum support: {min_support}')
     L_sets = []
     L1 = find_frequent_1_itemsets(file, min_support)
@@ -123,9 +123,5 @@ def peekline(f):
     f.seek(pos)             # set reader to where it was before the call to readline()
     return result           # return result of earlier read
 
-#function that will return a list of powersets for a set. The start parameter is the size of combinations it will start with
-def get_powerset(item_set):
-     output = list(item_set)
-     return chain.from_iterable(combinations(output,r) for r in range(len(output) + 1))
 if __name__ == '__main__':
     main()
