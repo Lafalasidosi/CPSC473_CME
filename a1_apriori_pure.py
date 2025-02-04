@@ -1,8 +1,6 @@
 import sys
 from itertools import combinations
 
-global L_sets
-
 def main():
     #D_name = sys.argv[2]
     #min_sup = sys.argv[2] / 100.0 * len(D)
