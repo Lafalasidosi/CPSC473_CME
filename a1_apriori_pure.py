@@ -22,7 +22,8 @@ def main():
                 C_t.update({c, count+1})
         k += 1
         # this line below will change from L.append... to L.update... etc.
-        L.append(set([c for c in C_t if C_t.get(c) >= min_sup])) 
+        L.append(set([c for c in C_t if C_t.get(c) >= min_sup]))
+    D.close()
     for L in L:
         print(L)
     
