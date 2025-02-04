@@ -61,10 +61,11 @@ def get_counts(filename):
 
 def find_frequent_1_itemsets(filename, min_sup):    
     counts = get_counts(filename)                 
-    has_min_sup = []
+    has_min_sup = [] # TODO: make this into a dictionary
     for x in counts:
         if counts.get(x) > min_sup:
             has_min_sup.append((x, counts.get(x)))
+            # TODO: the above should be has_min_sup.update({x, counts.get(x)})
     return has_min_sup
                 
             
@@ -104,7 +105,7 @@ def k_powersets(item_set, k):
 
 def has_infrequent_subset(candidate, L_prev, k):
     for s in k_powersets(candidate):
-        if s not in L_prev:
+        if s not in L_prev: #TODO: should not everything be done with dicts?
             return True
     return False
 
