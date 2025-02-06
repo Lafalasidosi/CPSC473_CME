@@ -31,6 +31,25 @@ def main():
         k += 1
     print("final: ", L_sets)
 
+    # create output file
+    output_str = "MiningResult.txt"
+    print(output_str)
+    output_file = open(output_str, "w")
+
+    # write results to file
+    output_file.write("|FPs| = " + str(len(L_sets)) + "\n")
+    for x in range(len(L_sets)):
+        # 1-itemsets
+        if x < len(L1):
+            output_file.write(str(L_sets[x][0]) + " : " + str(L_sets[x][1]) + "\n")
+        # n-itemsets
+        else:
+            itemset_str = ""
+            for element in L_sets[x][0]:
+                itemset_str += str(element) + ", "
+            output_file.write(itemset_str[:-2] + " : " + str(L_sets[x][1]) + "\n")
+
+
 def find_frequent_1_itemsets(filename, min_sup):    
     counts = get_counts(filename)                 
     has_min_sup = []
