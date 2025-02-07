@@ -8,31 +8,32 @@ def main():
     D_name = "a1-resources/retail.txt"
     D = open(D_name)
     min_sup = 15.0 / 100.0 * 88162
-    L = [set()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
-    C = [set(), set()]  # TODO: need to make these dicts; they store both an itemset and its count
+    L = [dict()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
+    C = [dict(), dict()]  
     L1 = find_frequent_1_itemsets(D_name, 10000)
     L.append(L1)
     k = 2 
     while not len(L[k-1]) == 0:
-        C.append(apriori_gen(L[k-1], k))
+        C_k = apriori_gen(L[k-1])
+        C.append(C_k)
         while (D.readline()): # scan D for counts
             t = to_ints(peekline(D).split()[2:])
             C_t = subset(C[k], t) # get the subsets of t that are candidates
             for c, count in C_t:
                 C_t.update({c, count+1})
+        L.append(dict(list((c, C_t[c]) for c in C_t if C_t[c] >= min_sup))) # k-th element of L
         k += 1
-        # this line below will change from L.append... to L.update... etc.
-        L.append(set([c for c in C_t if C_t.get(c) >= min_sup]))
     D.close()
     for L in L:
         print(L)
     
     
 def to_ints(string_array):
-    result = []
-    for s in string_array:
-        result.append(int(s))
-    return result       
+    return list(map(lambda x: int(x), string_array))
+
+
+def to_strings(int_array):
+    return list(map(lambda x: str(x), int_array))
     
     
 def subset(C_k, t):
@@ -42,29 +43,29 @@ def subset(C_k, t):
             results.update({s: 0})
     return results
         
-
+# Returns a dict of entries which look like "0": 3, meaning
+# the number 0 appears three times
 def get_counts(filename):
     result = {}                     
     data_file = open(filename)      
     while (data_file.readline()):                   # skips first line containing number of rows of data
         items = peekline(data_file).split()[2:]     # itemset portion of transaction = all columns except first two
         for entry in items:                         # for every entry in a line, 
-                entry = int(entry)                  # read it as an integer,
+#                entry = int(entry)                  # read it as an integer,       #may well not need to do this anymore
                 count = result.get(entry)           # check if it's already in `counts`:
                 if (count == None):                 # if it's not, it's the first time we've seen it
-                        result.update([(entry, 1)]) # so add it with a count of 1
+                        result.update({entry: 1}) # so add it with a count of 1
                 else:                               # otherwise, increment the value that's already there
-                        result.update([(entry, int(count) + 1)])
+                        result.update({entry: count + 1})
     return result
 
 
 def find_frequent_1_itemsets(filename, min_sup):    
     counts = get_counts(filename)                 
-    has_min_sup = [] # TODO: make this into a dictionary
+    has_min_sup = {} 
     for x in counts:
-        if counts.get(x) > min_sup:
-            has_min_sup.append((x, counts.get(x)))
-            # TODO: the above should be has_min_sup.update({x, counts.get(x)})
+        if counts.get(x) >= min_sup:
+            has_min_sup.update({x: counts.get(x)})
     return has_min_sup
                 
             
@@ -82,18 +83,18 @@ def all_equal_except_last(l1, l2):
         if l1[i] != l2[i]:
             return False
     return l1[length-1] < l2[length-1]
-    
 
-def apriori_gen(L_prev, k): # TODO: refactor to ise C_k as a dict; L_prev should be dict at this point
-    C_k = []
-    for l1 in L_prev:
+
+def apriori_gen(L_prev): 
+    C_k = {}
+    for l1 in L_prev:   # l1 = "0 32 44 45 678", for example
         for l2 in L_prev:
             if all_equal_except_last(l1, l2):
-                c = set(l1).union(set(l2))
+                c = set(l1).union(set(l2))  #TODO: change from a set of unique items to a string representing the set
                 if has_infrequent_subset(c, L_prev):            
                     c = ()
                 else:
-                    C_k.append(c)
+                    C_k.update({c: 0})
     return C_k
 
 
@@ -104,7 +105,7 @@ def k_powersets(item_set, k):
 
 def has_infrequent_subset(candidate, L_prev, k):
     for s in k_powersets(candidate):
-        if s not in L_prev: #TODO: shouldn't everything be done with dicts?
+        if s not in L_prev: 
             return True
     return False
 
