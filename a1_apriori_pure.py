@@ -5,9 +5,9 @@ def main():
     #D_name = sys.argv[2]
     #min_sup = sys.argv[2] / 100.0 * len(D)
     # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
-    D_name = "small.txt"
+    D_name = "a1-resources/retail.txt"
     D = open(D_name)
-    min_sup = 3
+    min_sup = 1000
     L = [dict()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
     C = [dict(), dict()]  
     L1 = find_frequent_1_itemsets(D_name, min_sup)
@@ -16,6 +16,8 @@ def main():
     while not len(L[k-1]) == 0:
         C_k = apriori_gen(L[k-1], k)
         C.append(C_k)
+        if D == None:
+            D = open(D_name)
         while (D.readline()): # scan D for counts
             t = to_ints(peekline(D).rstrip().split()[2:])
             C_t = subset(C[k], t) # get the subsets of t that are candidates
@@ -25,7 +27,8 @@ def main():
         L_k = dict([(c, C_k[c]) for c in C_k if C_k[c] >= min_sup])
         L.append(L_k)
         k += 1
-    D.close()
+        D.close()
+        D = None
     for x in L:
         print(x)
     
