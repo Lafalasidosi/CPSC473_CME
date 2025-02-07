@@ -1,13 +1,14 @@
+from math import ceil
 import sys
 from itertools import combinations
 
 def main():
-    #D_name = sys.argv[2]
-    #min_sup = sys.argv[2] / 100.0 * len(D)
-    # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
-    D_name = "a1-resources/1k5L.txt"
+    D_name = sys.argv[1]
+    print(D_name)
     D = open(D_name)
-    min_sup = 10
+    number_of_lines = int(peekline(D).rstrip())
+    min_sup = ceil(int(sys.argv[2]) / 100.0 * number_of_lines) 
+    print(min_sup)
     L = [dict()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
     C = [dict(), dict()]  
     L1 = find_frequent_1_itemsets(D_name, min_sup)
