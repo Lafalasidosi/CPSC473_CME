@@ -45,6 +45,17 @@ def main():
             count += 1
     output_file.write("|FPs| = " + str(count) + "\n")
     
+    for itemsets in L:
+        for itemset in itemsets:
+            if itemset < 
+    for x in range(len(L)):
+        if x < len(L):
+            output_file.write(str(L[x][0]) + " : " + str(L[x][1]) + "\n")
+        else:
+            itemset_str = ""
+            for element in L[x][0]:
+                itemset_str += str(element) + ", "
+            output_file.write(itemset_str[:-2] + " : " + str(L[x][1] + "\n"))
 def to_ints(string_array):
     return list(map(lambda x: int(x), string_array))
 
