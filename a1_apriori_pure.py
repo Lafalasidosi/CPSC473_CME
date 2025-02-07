@@ -5,9 +5,9 @@ def main():
     #D_name = sys.argv[2]
     #min_sup = sys.argv[2] / 100.0 * len(D)
     # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
-    D_name = "a1-resources/retail.txt"
+    D_name = "a1-resources/1k5L.txt"
     D = open(D_name)
-    min_sup = 1000
+    min_sup = 10
     L = [dict()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
     C = [dict(), dict()]  
     L1 = find_frequent_1_itemsets(D_name, min_sup)
