@@ -1,7 +1,6 @@
 from math import ceil
 import sys
 from itertools import combinations
-from math import ceil
 import linecache
 
 def main():
