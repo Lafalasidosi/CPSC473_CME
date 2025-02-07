@@ -1,13 +1,16 @@
 import sys
 from itertools import combinations
+from math import ceil
+import linecache
 
 def main():
     #D_name = sys.argv[2]
     #min_sup = sys.argv[2] / 100.0 * len(D)
     # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
-    D_name = "a1-resources/1k5L.txt"
+    D_name = sys.argv[1]
     D = open(D_name)
-    min_sup = 10
+    transaction_size = int(linecache.getline(D_name, 1))
+    min_sup = ceil((int(sys.argv[2]) / 100) * transaction_size)
     L = [dict()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
     C = [dict(), dict()]  
     L1 = find_frequent_1_itemsets(D_name, min_sup)
