@@ -5,27 +5,29 @@ def main():
     #D_name = sys.argv[2]
     #min_sup = sys.argv[2] / 100.0 * len(D)
     # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
-    D_name = "a1-resources/retail.txt"
+    D_name = "retail-head.txt"
     D = open(D_name)
-    min_sup = 15.0 / 100.0 * 88162
+    min_sup = 5
     L = [dict()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
     C = [dict(), dict()]  
-    L1 = find_frequent_1_itemsets(D_name, 10000)
+    L1 = find_frequent_1_itemsets(D_name, min_sup)
     L.append(L1)
     k = 2 
     while not len(L[k-1]) == 0:
-        C_k = apriori_gen(L[k-1])
+        C_k = apriori_gen(L[k-1], k)
         C.append(C_k)
         while (D.readline()): # scan D for counts
-            t = to_ints(peekline(D).split()[2:])
+            t = to_ints(peekline(D).rstrip().split()[2:])
             C_t = subset(C[k], t) # get the subsets of t that are candidates
-            for c, count in C_t:
-                C_t.update({c, count+1})
-        L.append(dict(list((c, C_t[c]) for c in C_t if C_t[c] >= min_sup))) # k-th element of L
+            for c in C_t:
+                count = C_k[c]
+                C_k.update({c: count+1})
+        L_k = dict([(c, C_k[c]) for c in C_k if C_k[c] >= min_sup])
+        L.append(L_k)
         k += 1
     D.close()
-    for L in L:
-        print(L)
+    for x in L:
+        print(x)
     
     
 def to_ints(string_array):
@@ -38,9 +40,11 @@ def to_strings(int_array):
     
 def subset(C_k, t):
     results = {}
-    for s in C_k:
-        if s in t:
-            results.update({s: 0})
+    shopping_cart = set(to_ints(t))
+    for item_string in C_k:
+        items = set(to_ints(item_string.split()))
+        if items.issubset(shopping_cart):
+            results.update({item_string: 0})
     return results
         
 # Returns a dict of entries which look like "0": 3, meaning
@@ -77,7 +81,9 @@ def peekline(f):
     return result           # return result of earlier read
 
 
-def all_equal_except_last(l1, l2):
+def all_equal_except_last(x, y):
+    l1 = x.split()
+    l2 = y.split()
     length = len(l1) # == len(l2)
     for i in range(length-1):
         if l1[i] != l2[i]:
@@ -85,27 +91,36 @@ def all_equal_except_last(l1, l2):
     return l1[length-1] < l2[length-1]
 
 
-def apriori_gen(L_prev): 
+def apriori_gen(L_prev, k): 
     C_k = {}
     for l1 in L_prev:   # l1 = "0 32 44 45 678", for example
         for l2 in L_prev:
             if all_equal_except_last(l1, l2):
-                c = set(l1).union(set(l2))  #TODO: change from a set of unique items to a string representing the set
-                if has_infrequent_subset(c, L_prev):            
-                    c = ()
+                c = itemset_union(l1, l2)
+                if has_infrequent_subset(c, L_prev, k-1):
+                    c = ""
                 else:
                     C_k.update({c: 0})
     return C_k
 
 
+def itemset_union(l1, l2):
+    to_append = to_strings(l2)[-1]
+    return l1 + " {}".format(to_append)
+    
+
 def k_powersets(item_set, k):
-        s = list(item_set)
-        return combinations(s, k)
+        s = item_set
+        result = list(combinations(s, k))
+        return result
 
 
-def has_infrequent_subset(candidate, L_prev, k):
-    for s in k_powersets(candidate):
-        if s not in L_prev: 
+def has_infrequent_subset(c, L_prev, k):
+    candidate_itemset = set(to_ints(c.split()))
+    frequent_sets = list(map(lambda x: set(to_ints(x)), L_prev))
+    k_candidate_subsets = map(lambda x: set(x), k_powersets(candidate_itemset, k))
+    for S in k_candidate_subsets:
+        if not S in frequent_sets:
             return True
     return False
 
