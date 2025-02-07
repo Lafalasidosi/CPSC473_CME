@@ -35,6 +35,15 @@ def main():
     for x in L:
         print(x)
     
+    output_str = 'MiningResult.txt'
+
+    output_file = open(output_str, 'w')
+    count = 0
+    print()
+    for i in L:
+        for j in i:
+            count += 1
+    output_file.write("|FPs| = " + str(count) + "\n")
     
 def to_ints(string_array):
     return list(map(lambda x: int(x), string_array))
