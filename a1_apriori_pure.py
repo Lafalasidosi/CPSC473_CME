@@ -5,9 +5,9 @@ def main():
     #D_name = sys.argv[2]
     #min_sup = sys.argv[2] / 100.0 * len(D)
     # e.g. len(D) = 88162 => argv[2] = 50 => minimum support = 44081
-    D_name = "retail-head.txt"
+    D_name = "small.txt"
     D = open(D_name)
-    min_sup = 5
+    min_sup = 3
     L = [dict()]         # L & C contain these emptyset entries to keep k-indexing in line with the pseudocode
     C = [dict(), dict()]  
     L1 = find_frequent_1_itemsets(D_name, min_sup)
@@ -88,7 +88,8 @@ def all_equal_except_last(x, y):
     for i in range(length-1):
         if l1[i] != l2[i]:
             return False
-    return l1[length-1] < l2[length-1]
+    result = int(l1[length-1]) < int(l2[length-1])
+    return result
 
 
 def apriori_gen(L_prev, k): 
@@ -105,7 +106,7 @@ def apriori_gen(L_prev, k):
 
 
 def itemset_union(l1, l2):
-    to_append = to_strings(l2)[-1]
+    to_append = to_strings(l2.split())[-1]
     return l1 + " {}".format(to_append)
     
 
@@ -117,8 +118,8 @@ def k_powersets(item_set, k):
 
 def has_infrequent_subset(c, L_prev, k):
     candidate_itemset = set(to_ints(c.split()))
-    frequent_sets = list(map(lambda x: set(to_ints(x)), L_prev))
-    k_candidate_subsets = map(lambda x: set(x), k_powersets(candidate_itemset, k))
+    frequent_sets = list(map(lambda x: set(to_ints(x.split())), L_prev)) # TODO: this line incorrectly turns '32' into {3, 2}
+    k_candidate_subsets = list(map(lambda x: set(x), k_powersets(candidate_itemset, k)))
     for S in k_candidate_subsets:
         if not S in frequent_sets:
             return True
