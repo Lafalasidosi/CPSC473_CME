@@ -3,6 +3,7 @@ import sys
 from itertools import combinations
 import linecache
 from functools import reduce
+import time
 
 def main():
     D_name = sys.argv[1]
@@ -11,11 +12,11 @@ def main():
     D = open(D_name)
     transaction_size = int(linecache.getline(D_name, 1))
     min_sup = ceil((int(sys.argv[2]) / 100) * transaction_size)
-    
+    print('minsup = ' + sys.argv[2] + '% = ' + str(min_sup))
     k = 2 
     L = [dict(), dict()]            # So that L[k] refers to frequent k-itemsets
     C = [dict(), dict(), dict()]    # So that C[k] refers to candidate k-itemsets
-    
+    run_time_start = time.time()
     L1 = find_frequent_1_itemsets(D_name, min_sup)
     L[1] = L1
     
@@ -36,9 +37,16 @@ def main():
         C.append({})
     
     L.pop()
+    run_time_end = time.time()
     produce_output(L, D_name)
+    count = 0
+    for i in L:
+        for j in i:
+            count += 1
 
-
+    total_run_time = run_time_end - run_time_start
+    print('|FPs| = ' + str(count))
+    print(f'Total Runtime: {total_run_time:.3f} sec')
 def apriori_gen(L_prev, k): 
     """Return k-itemsets which have no infrequent subsets."""
     C_k = {}
