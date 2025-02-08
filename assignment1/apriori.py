@@ -36,7 +36,7 @@ def main():
     L.pop()
     for X in L:
         print(X)
-    produce_output(L)
+    produce_output(L, D_name)
 
 
 def apriori_gen(L_prev, k): 
@@ -66,8 +66,9 @@ def has_infrequent_subset(candidate_itemset, L_prev, k):
     return False
 
 
-def produce_output(L):
-    output_str = 'MiningResult.txt'
+def produce_output(L, D_name):
+    inputfilewithoutextension = D_name[:-4]
+    output_str = 'MiningResult_{}.txt'.format(inputfilewithoutextension)
     output_file = open(output_str, 'w')
     count = 0
     print()
