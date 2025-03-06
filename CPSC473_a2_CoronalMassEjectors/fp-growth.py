@@ -13,6 +13,11 @@ def main():
     transaction_size = int(linecache.getline(D_name, 1))
     min_sup = ceil((int(sys.argv[2]) / 100) * transaction_size)
     print('minsup = ' + sys.argv[2] + '% = ' + str(min_sup))
+    run_time_start = time.time()
+    #fp-growth in main memory here
+    run_time_end = time.time()
+    
+    total_run_time = run_time_end - run_time_start
 
 def produce_output(L, D_name):
     inputfilewithoutextension = D_name[:-4]
