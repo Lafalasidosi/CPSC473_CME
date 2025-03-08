@@ -4,6 +4,7 @@ from itertools import combinations
 import linecache
 from functools import reduce
 import time
+from collections import defaultdict
 
 def main():
     D_name = sys.argv[1]
@@ -16,7 +17,7 @@ def main():
     run_time_start = time.time()
     #fp-growth in main memory here
     run_time_end = time.time()
-    
+    #Total runtime of the program
     total_run_time = run_time_end - run_time_start
 
 def produce_output(L, D_name):
@@ -45,3 +46,43 @@ def peekline(f):
 
 if __name__ == '__main__':
     main()
+
+class FPNode:
+    def __init__(self, item, count, parent):
+        self.item = item
+        self.count = count
+        self.parent = parent
+        self.children = {}
+        self.next = None
+    
+    def increment(self, count):
+        self.count += count
+
+class FPTree:
+    def __init__(self, transactions, min_support):
+        self.min_support = min_support
+        self.side_table = {}
+        self.root = FPNode(None, 1, None)
+    
+        item_count = defaultdict(int)
+        for transaction in transactions:
+            for item in transaction:
+                item_count[item] += 1
+
+        self.frequent_items = {}
+        for k,v in item_count.items():
+            if v >= min_support:
+                self.frequent_items[k] = v
+        
+        self.header_table = {}
+        for item, count in self.frequent_items.items():
+            self.header_table[item] = [count, None]
+        
+        for transaction in transactions:
+            sorted_items = []
+            for item in sorted(transaction, key=lambda i: -item_count[i]):
+                if item in self.frequent_items:
+                    sorted_items.append(item)
+            self.insert_tree(sorted_items, self.root)
+    
+    
