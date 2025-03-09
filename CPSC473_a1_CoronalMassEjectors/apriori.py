@@ -69,7 +69,7 @@ def has_infrequent_subset(candidate_itemset, L_prev, k):
     frequent_sets = list(map(lambda x: set(to_ints(x)), L_prev)) 
     k_candidate_subsets = list(map(lambda x: set(x), k_powersets(C, k)))
     for S in k_candidate_subsets:
-        if not S in frequent_sets:
+        if S not in frequent_sets:
             return True
     return False
 
@@ -145,7 +145,7 @@ def get_counts(filename):
         items = peekline(data_file).split()[2:]     
         for entry in items:                         
                 count = result.get(entry)           
-                if (count == None):                 
+                if (count is None):                 
                     result.update({entry: 1})   
                 else:                               
                     result.update({entry: count + 1})
