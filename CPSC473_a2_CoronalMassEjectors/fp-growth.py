@@ -47,37 +47,42 @@ def peekline(f):
 if __name__ == '__main__':
     main()
 
+#Nodes in an FP-tree
 class FPNode:
     def __init__(self, item, count, parent):
         self.item = item
         self.count = count
         self.parent = parent
         self.children = {}
+        #the next node with the same item
         self.next = None
-    
+    #increment value of FPNode
     def increment(self, count):
         self.count += count
 
+#The FP-tree
 class FPTree:
     def __init__(self, transactions, min_support):
         self.min_support = min_support
+        #Side table to point to nodes
         self.side_table = {}
+        #Root of tree
         self.root = FPNode(None, 1, None)
     
         item_count = defaultdict(int)
+        #Loop through all transactions and increment count of item
         for transaction in transactions:
             for item in transaction:
                 item_count[item] += 1
-
+        #Based on MST, add items to frequent_items if its >= MST
         self.frequent_items = {}
         for k,v in item_count.items():
             if v >= min_support:
                 self.frequent_items[k] = v
-        
-        self.header_table = {}
+        # Add elements from frequent_items into the side table.
         for item, count in self.frequent_items.items():
-            self.header_table[item] = [count, None]
-        
+            self.side_table[item] = [count, None]
+        #Sort items based on support count. If item is in frequent_items, append it to sorted items and insert it into tree.
         for transaction in transactions:
             sorted_items = []
             for item in sorted(transaction, key=lambda i: -item_count[i]):
