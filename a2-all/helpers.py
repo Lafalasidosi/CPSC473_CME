@@ -103,3 +103,10 @@ def k_powersets(itemset, k):
     """Return all subsets of itemset of cardinality k."""
     result = list(combinations(itemset, k))
     return result
+
+def sort_L_table(L_table):
+    """Sort a dictionary according to the values of the keys."""
+    kvpairs = [(k, L_table[k]) for k in L_table]
+    kvpairs.sort(key=lambda x: x[1])
+    result = dict(kvpairs)
+    return result
