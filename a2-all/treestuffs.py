@@ -9,7 +9,8 @@ class Node:
         self.next_nibling = None    # these point to FPTree nodes with same item
     
     def increment(self):
-        self.count.update({self.item, self.count+1})
+        self.count += 1
+        self.frequency.update({self.item: self.count})
         
     def add_child(self, child):
         self.children.append(child)
@@ -19,6 +20,13 @@ class Node:
     
     def set_next_nibling(self, nibling):
         self.next_nibling = nibling
+        
+    def show(self):
+        print("[\"{}\", {}]".format(self.item, self.count))
+    
+    def get_children(self):
+        return self.children
+
         
 class FPTree:
     def __init__(self):
