@@ -3,7 +3,7 @@ class Node:
         self.item = item
         self.count = 1
         self.frequency = {self.item: self.count}
-        self.children = []
+        self.children = {}
         self.parent = parent
         self.prev_nibling = None    # nibling is a term for cousin, aunt/uncle, niece/nephew, etc.
         self.next_nibling = None    # these point to FPTree nodes with same item
@@ -12,8 +12,11 @@ class Node:
         self.count += 1
         self.frequency.update({self.item: self.count})
         
+    def get_item(self):
+        return self.item
+        
     def add_child(self, child):
-        self.children.append(child)
+        self.children.update({child.get_item(): child})
         
     def set_prev_nibling(self, nibling):
         self.prev_nibling = nibling
@@ -27,6 +30,8 @@ class Node:
     def get_children(self):
         return self.children
 
+    def get_child(self, item):
+        return self.children[item]
         
 class FPTree:
     def __init__(self):
