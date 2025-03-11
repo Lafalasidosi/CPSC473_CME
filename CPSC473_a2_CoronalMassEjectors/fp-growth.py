@@ -89,5 +89,8 @@ class FPTree:
                 if item in self.frequent_items:
                     sorted_items.append(item)
             self.insert_tree(sorted_items, self.root)
+        
+        def insert_tree(self, node, items):
+            yield
     
     
