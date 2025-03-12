@@ -24,9 +24,10 @@ def main():
     fp_tree = FPTree(transactions, min_sup)
     mined_patterns = mine_patterns(fp_tree.side_table, min_sup)
     run_time_end = time.time()
+    produce_output(mined_patterns, D_name)
     #produce_output(fp_tree, D_name)
     count = 0
-    for i in len(mined_patterns):
+    for _ in range(len(mined_patterns)):
             count += 1
     #Total runtime of the program
     total_run_time = run_time_end - run_time_start
@@ -98,7 +99,7 @@ class FPTree:
             for item in sorted(transaction, key=lambda i: -item_count[i]):
                 if item in self.frequent_items:
                     sorted_items.append(item)
-            self.insert_tree(sorted_items, self.root)
+            self.insert_tree(self.root, sorted_items)
 
     #Insert elements from transaction into tree    
     def insert_tree(self, node: FPNode, items):
@@ -106,20 +107,22 @@ class FPTree:
             return
         
         first_item = items[0]
-        if first_item in node.children:
-            node.children[first_item].increment(1)
-        else:
-            new_node = FPNode(first_item, 1, node)
+        if first_item not in node.children:
+            node.children[first_item] = FPNode(first_item, 1, node)
 
+            #update side table
             if self.side_table[first_item][1] is None:
-                self.side_table[first_item][1] = new_node
+                self.side_table[first_item][1] = node.children[first_item]
             else:
                 current = self.side_table[first_item][1]
                 while current.next:
                     current = current.next
-                current.next = new_node
+                current.next = node.children[first_item]
         
-        self.insert_tree(items[1:], node.children[first_item])
+        else:
+            node.children[first_item].increment(1)
+
+        self.insert_tree(node.children[first_item], items[1:])
 
 #Mine patterns from fp-tree
 def mine_patterns(side_table, min_support, prefix=frozenset()):
@@ -143,12 +146,12 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
             
             for _ in range(node.count):
                 base.append(path)
-            node.next
+            node = node.next
 
         #Build projected tree
         projected_tree, new_header = build_fp_tree(base, min_support)
         if new_header:
-            mined_patterns.update(mined_patterns(new_header, min_support, new_prefix))
+            mined_patterns.update(mine_patterns(new_header, min_support, new_prefix))
         
         return mined_patterns
 #from a base condition for projection, build an fp-tree
