@@ -12,7 +12,6 @@ def main():
     # Sort the list based on the second element, in ascending order
     L1_sorted = sorted(L1, key=lambda x: x[1])
     L1_sorted.reverse()
-
     print(L1_sorted)
 
     # Create the Ordered-Item set
@@ -36,6 +35,8 @@ def main():
 
 
     """
+    Apriori text file output code. Commented out for testing purposes
+
 
     # create output file
     output_str = filename.replace("a2-resources/", "a2-resources/MiningResult_")
