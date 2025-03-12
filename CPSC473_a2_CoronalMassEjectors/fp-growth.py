@@ -157,17 +157,17 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
             #move to the next node    
             node = node.next
 
-        #Build projected tree
-        projected_tree, new_side_table = build_fp_tree(base, min_support)
+        #Build projected tree side table
+        new_side_table = build_projected_side_table(base, min_support)
         #if new header is not empty, recurse through tree and mine more patterns.
         if new_side_table:
             mined_patterns.update(mine_patterns(new_side_table, min_support, new_prefix))
         
     return mined_patterns
-#from a base condition for projection, build an fp-tree
-def build_fp_tree(transactions, min_support):
+#from a base condition for projection, build an fp-tree projection, and return the side table if it is not null
+def build_projected_side_table(transactions, min_support):
     projected_tree = FPTree(transactions, min_support)
-    return projected_tree, projected_tree.side_table if projected_tree.side_table else None
+    return projected_tree.side_table if projected_tree.side_table else None
 #Start code execution at main method
 if __name__ == '__main__':
     main()
