@@ -82,7 +82,7 @@ class FPTree:
         self.side_table = {}
         #Root of tree
         self.root = FPNode(None, 1, None)
-    
+        #a dictionary of all the items in the inputted dataset, and their count
         item_count = defaultdict(int)
         #Loop through all transactions and increment count of item
         for transaction in transactions:
@@ -102,6 +102,7 @@ class FPTree:
             for item in sorted(transaction, key=lambda i: -item_count[i]):
                 if item in self.frequent_items:
                     sorted_items.append(item)
+            #insert sorted items into the tree, starting from the root
             self.insert_tree(self.root, sorted_items)
 
     #Insert elements from transaction into tree    
