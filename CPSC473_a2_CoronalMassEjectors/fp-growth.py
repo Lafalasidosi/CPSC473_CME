@@ -18,27 +18,35 @@ def main():
     #fp-growth in main memory here
     transactions = []
     with open(D_name, "r")as file:
-        for line in islice(file, 2, None):
+        for line in islice(file, 1, None):
             row = line.strip().split()
             transactions.append(row[2:])
+    fp_tree = FPTree(transactions, min_sup)
+    mined_patterns = mine_patterns(fp_tree.side_table, min_sup)
     run_time_end = time.time()
+    #produce_output(fp_tree, D_name)
+    count = 0
+    for i in len(mined_patterns):
+            count += 1
     #Total runtime of the program
     total_run_time = run_time_end - run_time_start
+    #Print frequent patterns found and the total runtime
+    print('|FPs| = ' + str(count))
+    print(f'Total Runtime: {total_run_time:.3f} sec')
 
-def produce_output(L, D_name):
+#Produce outputted text file
+def produce_output(patterns, D_name):
     inputfilewithoutextension = D_name[:-4]
     output_str = 'MiningResult_{}.txt'.format(inputfilewithoutextension)
     output_file = open(output_str, 'w')
     count = 0
     print()
-    for i in L:
-        for j in i:
-            count += 1
+    for _ in range(len(patterns)):
+        count += 1
     output_file.write("|FPs| = " + str(count) + "\n")
     
-    for n_itemsets in L:
-        for itemset, count in n_itemsets.items():
-            output_file.write(str(itemset) + " : " + str(count) + "\n")
+    for n_itemsets, count in patterns.items():
+        output_file.write(str(n_itemsets) + " : " + str(count) + "\n")
 
 def peekline(f):
     """Return the current line of an open file 
@@ -48,9 +56,6 @@ def peekline(f):
     result = f.readline()
     f.seek(pos)
     return result
-
-if __name__ == '__main__':
-    main()
 
 #Nodes in an FP-tree
 class FPNode:
@@ -150,3 +155,6 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
 def build_fp_tree(transactions, min_support):
     projected_tree = FPTree(transactions, min_support)
     return projected_tree, projected_tree.side_table if projected_tree.side_table else None
+
+if __name__ == '__main__':
+    main()
