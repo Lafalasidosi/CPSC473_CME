@@ -158,10 +158,10 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
             node = node.next
 
         #Build projected tree
-        projected_tree, new_header = build_fp_tree(base, min_support)
+        projected_tree, new_side_table = build_fp_tree(base, min_support)
         #if new header is not empty, recurse through tree and mine more patterns.
-        if new_header:
-            mined_patterns.update(mine_patterns(new_header, min_support, new_prefix))
+        if new_side_table:
+            mined_patterns.update(mine_patterns(new_side_table, min_support, new_prefix))
         
     return mined_patterns
 #from a base condition for projection, build an fp-tree
