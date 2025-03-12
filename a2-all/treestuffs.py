@@ -4,7 +4,6 @@ class Node:
         self.count = 1
         self.frequency = {self.item: self.count}
         self.children = {}
-        self.parent = parent
         self.prev_nibling = None    # nibling is a term for cousin, aunt/uncle, niece/nephew, etc.
         self.next_nibling = None    # these point to FPTree nodes with same item
     
@@ -36,6 +35,9 @@ class Node:
 class FPTree:
     def __init__(self):
         self.root = Node('')
+        
+    def get_root(self):
+        return self.root
     
     def add_node(self, child, parent=None):
         '''Add a node to the tree with a specified parent.
