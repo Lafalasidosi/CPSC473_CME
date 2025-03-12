@@ -47,7 +47,7 @@ def produce_output(patterns, D_name):
     output_file.write("|FPs| = " + str(count) + "\n")
     
     for n_itemsets, count in patterns.items():
-        output_file.write(str(n_itemsets) + " : " + str(count) + "\n")
+        output_file.write(", ".join(n_itemsets) + " : " + str(count) + "\n")
 
 def peekline(f):
     """Return the current line of an open file 
