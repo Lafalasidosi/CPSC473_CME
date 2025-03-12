@@ -153,7 +153,7 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
         if new_header:
             mined_patterns.update(mine_patterns(new_header, min_support, new_prefix))
         
-        return mined_patterns
+    return mined_patterns
 #from a base condition for projection, build an fp-tree
 def build_fp_tree(transactions, min_support):
     projected_tree = FPTree(transactions, min_support)
