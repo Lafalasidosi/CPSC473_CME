@@ -1,6 +1,6 @@
 from math import ceil
 import sys
-from itertools import combinations
+from itertools import combinations, islice
 import linecache
 from functools import reduce
 import time
@@ -16,7 +16,11 @@ def main():
     print('minsup = ' + sys.argv[2] + '% = ' + str(min_sup))
     run_time_start = time.time()
     #fp-growth in main memory here
-    
+    transactions = []
+    with open(D_name, "r")as file:
+        for line in islice(file, 2, None):
+            row = line.strip().split()
+            transactions.append(row[2:])
     run_time_end = time.time()
     #Total runtime of the program
     total_run_time = run_time_end - run_time_start
