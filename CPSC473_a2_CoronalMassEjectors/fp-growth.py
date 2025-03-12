@@ -37,8 +37,8 @@ def main():
 
 #Produce outputted text file
 def produce_output(patterns, D_name):
-    inputfilewithoutextension = D_name[:-4]
-    output_str = 'MiningResult_{}.txt'.format(inputfilewithoutextension)
+    input_file_without_extension = D_name[:-4]
+    output_str = 'MiningResult_{}.txt'.format(input_file_without_extension)
     output_file = open(output_str, 'w')
     count = 0
     print()
