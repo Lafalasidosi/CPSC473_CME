@@ -89,8 +89,24 @@ class FPTree:
                 if item in self.frequent_items:
                     sorted_items.append(item)
             self.insert_tree(sorted_items, self.root)
+
+    #Insert elements from transaction into tree    
+    def insert_tree(self, node: FPNode, items):
+        if len(items) == 0:
+            return
         
-        def insert_tree(self, node, items):
-            yield
-    
-    
+        first_item = items[0]
+        if first_item in node.children:
+            node.children[first_item].increment(1)
+        else:
+            new_node = FPNode(first_item, 1, node)
+
+            if self.side_table[first_item][1] is None:
+                self.side_table[first_item][1] = new_node
+            else:
+                current = self.side_table[first_item][1]
+                while current.next:
+                    current = current.next
+                current.next = new_node
+        
+        self.insert_tree(items[1:], node.children[first_item])
