@@ -14,6 +14,7 @@ def main():
     transaction_size = int(linecache.getline(D_name, 1))
     min_sup = ceil((int(sys.argv[2]) / 100) * transaction_size)
     print('minsup = ' + sys.argv[2] + '% = ' + str(min_sup))
+    #Start time of program
     run_time_start = time.time()
     #fp-growth in main memory here
     transactions = []
@@ -21,10 +22,15 @@ def main():
         for line in islice(file, 1, None):
             row = line.strip().split()
             transactions.append(row[2:])
+    #Generate fp-tree
     fp_tree = FPTree(transactions, min_sup)
+    #mine patterns from fp-tree
     mined_patterns = mine_patterns(fp_tree.side_table, min_sup)
+    #end time of program execution
     run_time_end = time.time()
+    #generate output file
     produce_output(mined_patterns, D_name)
+    #Count how many frequent patterns there are
     count = 0
     for _ in range(len(mined_patterns)):
             count += 1
@@ -36,33 +42,31 @@ def main():
 
 #Produce outputted text file
 def produce_output(patterns, D_name):
+    #Remove extension from file name
     input_file_without_extension = D_name[:-4]
+    #format for output string for output file
     output_str = 'MiningResult_{}.txt'.format(input_file_without_extension)
     output_file = open(output_str, 'w')
     count = 0
     print()
+    #loop through mined patterns and increment count, write number of frequent patterns to file
     for _ in range(len(patterns)):
         count += 1
     output_file.write("|FPs| = " + str(count) + "\n")
-    
+    #write the itemset, and the count to the file
     for n_itemsets, count in patterns.items():
         output_file.write(", ".join(n_itemsets) + " : " + str(count) + "\n")
-
-def peekline(f):
-    """Return the current line of an open file 
-    without moving the reader pointer.
-    """
-    pos = f.tell()
-    result = f.readline()
-    f.seek(pos)
-    return result
 
 #Nodes in an FP-tree
 class FPNode:
     def __init__(self, item, count, parent):
+        #item that node is for
         self.item = item
+        #support count for item
         self.count = count
+        #parent of node
         self.parent = parent
+        #children of node
         self.children = {}
         #the next node with the same item
         self.next = None
