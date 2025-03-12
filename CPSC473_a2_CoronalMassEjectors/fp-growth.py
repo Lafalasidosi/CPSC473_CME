@@ -16,6 +16,7 @@ def main():
     print('minsup = ' + sys.argv[2] + '% = ' + str(min_sup))
     run_time_start = time.time()
     #fp-growth in main memory here
+    
     run_time_end = time.time()
     #Total runtime of the program
     total_run_time = run_time_end - run_time_start
@@ -110,3 +111,38 @@ class FPTree:
                 current.next = new_node
         
         self.insert_tree(items[1:], node.children[first_item])
+
+#Mine patterns from fp-tree
+def mine_patterns(side_table, min_support, prefix=frozenset()):
+    #dictionary to hold patterns mined from tree
+    mined_patterns = {}
+    #Sort elements in side table and loop through each element in side table
+    for item in sorted(side_table.keys(), key=lambda k: side_table[k][0]):
+        new_prefix = prefix | {item}
+        mined_patterns[frozenset(new_prefix)] = side_table[item][0]
+
+        #find base for conditional pattern
+        base = []
+        node = side_table[item][1]
+
+        while node:
+            path = []
+            parent = node.parent
+            while parent and parent.item is not None:
+                path.append(parent.item)
+                parent = parent.parent
+            
+            for _ in range(node.count):
+                base.append(path)
+            node.next
+
+        #Build projected tree
+        projected_tree, new_header = build_fp_tree(base, min_support)
+        if new_header:
+            mined_patterns.update(mined_patterns(new_header, min_support, new_prefix))
+        
+        return mined_patterns
+#from a base condition for projection, build an fp-tree
+def build_fp_tree(transactions, min_support):
+    projected_tree = FPTree(transactions, min_support)
+    return projected_tree, projected_tree.side_table if projected_tree.side_table else None
