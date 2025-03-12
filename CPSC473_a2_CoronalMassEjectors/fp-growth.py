@@ -25,7 +25,6 @@ def main():
     mined_patterns = mine_patterns(fp_tree.side_table, min_sup)
     run_time_end = time.time()
     produce_output(mined_patterns, D_name)
-    #produce_output(fp_tree, D_name)
     count = 0
     for _ in range(len(mined_patterns)):
             count += 1
