@@ -105,12 +105,14 @@ class FPTree:
             #insert sorted items into the tree, starting from the root
             self.insert_tree(self.root, sorted_items)
 
-    #Insert elements from transaction into tree    
+    #Insert elements from transaction into tree. Transactions will be inserted one node at a time    
     def insert_tree(self, node: FPNode, items):
+        #Base case for recursion
         if len(items) == 0:
             return
-        
+        #The first node will be based on the first item found in items[]
         first_item = items[0]
+        #if the first item is not in the children of node, then it will add it in to children as a new child node.
         if first_item not in node.children:
             node.children[first_item] = FPNode(first_item, 1, node)
 
@@ -122,10 +124,10 @@ class FPTree:
                 while current.next:
                     current = current.next
                 current.next = node.children[first_item]
-        
+        #if first item is in the children of node, then it will increment that node item by 1
         else:
             node.children[first_item].increment(1)
-
+        #Recurse through the tree to add the next item into the fp-tree
         self.insert_tree(node.children[first_item], items[1:])
 
 #Mine patterns from fp-tree
@@ -139,21 +141,25 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
 
         #find base for conditional pattern
         base = []
+        #set the inidital node for the while loop
         node = side_table[item][1]
-
+        #While there are nodes in the table, find the paths that lead to that item in the tree
         while node:
             path = []
             parent = node.parent
+            #while the parent node and item is not null, append nodes to the path array, and go up the tree.
             while parent and parent.item is not None:
                 path.append(parent.item)
                 parent = parent.parent
-            
+            #append the path to the base conditional pattern based on the count of the node
             for _ in range(node.count):
                 base.append(path)
+            #move to the next node    
             node = node.next
 
         #Build projected tree
         projected_tree, new_header = build_fp_tree(base, min_support)
+        #if new header is not empty, recurse through tree and mine more patterns.
         if new_header:
             mined_patterns.update(mine_patterns(new_header, min_support, new_prefix))
         
@@ -162,6 +168,6 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
 def build_fp_tree(transactions, min_support):
     projected_tree = FPTree(transactions, min_support)
     return projected_tree, projected_tree.side_table if projected_tree.side_table else None
-
+#Start code execution at main method
 if __name__ == '__main__':
     main()
