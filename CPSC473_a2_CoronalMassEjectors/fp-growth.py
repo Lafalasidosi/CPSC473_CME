@@ -30,13 +30,12 @@ def main():
 
     #generate output file
     produce_output(mined_patterns, D_name)
-    #Count how many frequent patterns there are
-    count = len(mined_patterns)
+
     #Total runtime of the program
     total_run_time = run_time_end - run_time_start
 
     #Print frequent patterns found and the total runtime
-    print('|FPs| = ' + str(count))
+    print('|FPs| = ' + str(len(mined_patterns)))
     print(f'Total Runtime: {total_run_time:.3f} sec')
 
 #Nodes in an FP-tree
@@ -170,8 +169,7 @@ def produce_output(patterns, D_name):
     print()
     
     #loop through mined patterns and increment count, write number of frequent patterns to file
-    count = len(patterns)
-    output_file.write("|FPs| = " + str(count) + "\n")
+    output_file.write("|FPs| = " + str(len(patterns)) + "\n")
     
     #write the itemset, and the count to the file
     for n_itemsets, count in patterns.items():
