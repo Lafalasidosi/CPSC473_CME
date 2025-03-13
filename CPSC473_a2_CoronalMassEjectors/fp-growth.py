@@ -140,7 +140,7 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
             #append the path to the base conditional pattern based on the count of the node
             for _ in range(node.count):
                 base.append(path)
-            #move to the next node    
+               
             node = node.next
 
         #Build projected tree side table
