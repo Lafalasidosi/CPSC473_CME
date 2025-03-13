@@ -7,11 +7,14 @@ import time
 from collections import defaultdict
 
 def main():
+    #D_name is the filename obtains from command line
     D_name = sys.argv[1]
     if D_name[0] == '.':
         D_name = D_name[2:]     # no file names starting with './'
     D = open(D_name)
+    #grab the first line from the inputted file to get the number of transactions in a dataset
     transaction_size = int(linecache.getline(D_name, 1))
+    #calculate minimum support
     min_sup = ceil((int(sys.argv[2]) / 100) * transaction_size)
     print('minsup = ' + sys.argv[2] + '% = ' + str(min_sup))
     #Start time of program
@@ -139,7 +142,7 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
         new_prefix = prefix | {item}
         mined_patterns[frozenset(new_prefix)] = side_table[item][0]
 
-        #find base for conditional pattern
+        #base for a pattern to use for projecting a tree
         base = []
         #set the inidital node for the while loop
         node = side_table[item][1]
@@ -164,10 +167,13 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
             mined_patterns.update(mine_patterns(new_side_table, min_support, new_prefix))
         
     return mined_patterns
+
 #from a base condition for projection, build an fp-tree projection, and return the side table if it is not null
 def build_projected_side_table(transactions, min_support):
+    #build projected tree based given transactions and min_support
     projected_tree = FPTree(transactions, min_support)
     return projected_tree.side_table if projected_tree.side_table else None
+
 #Start code execution at main method
 if __name__ == '__main__':
     main()
