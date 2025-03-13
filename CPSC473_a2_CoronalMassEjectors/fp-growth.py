@@ -178,7 +178,7 @@ def produce_output(patterns, D_name):
 
 #helper function to convert inputted dataset/text file into a 2d array
 def text_to_2d_array(filename, base_array):
-    with open(filename, "r")as file:
+    with open(filename, "r") as file:
         for line in islice(file, 1, None):
             row = line.strip().split()
             base_array.append(row[2:])
