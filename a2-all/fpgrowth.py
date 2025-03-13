@@ -19,6 +19,7 @@ def main():
     C = [dict(), dict(), dict()]    # So that C[k] refers to candidate k-itemsets
     run_time_start = time.time()
     L1 = find_frequent_1_itemsets(D_name, min_sup)
+    L1_to_FPTree = dict([(x, None) for x in L1.keys()])
     L[1] = L1
     
     
