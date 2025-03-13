@@ -122,7 +122,7 @@ def mine_patterns(side_table, min_support, prefix=frozenset()):
     mined_patterns = {}
     #Sort elements in side table and loop through each element in side table
     for item in sorted(side_table.keys(), key=lambda k: side_table[k][0]):
-        new_prefix = prefix | {item}
+        new_prefix = prefix.union({item})
         mined_patterns[frozenset(new_prefix)] = side_table[item][0]
 
         #base for a pattern to use for projecting a tree
