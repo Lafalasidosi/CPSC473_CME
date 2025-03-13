@@ -158,6 +158,7 @@ def build_projected_side_table(transactions, min_support):
     return projected_tree.side_table if projected_tree.side_table else None
 
 '''Helper functions'''
+
 #Produce outputted text file
 def produce_output(patterns, D_name):
     #Remove extension from file name
