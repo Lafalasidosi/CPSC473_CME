@@ -15,7 +15,7 @@ def main():
     #calculate minimum support
     min_sup = ceil((int(sys.argv[2]) / 100) * transaction_size)
     print('minsup = ' + sys.argv[2] + '% = ' + str(min_sup))
-    #Start time of program
+
     run_time_start = time.time()
     #fp-growth in main memory here
     transactions = []
@@ -24,7 +24,7 @@ def main():
     fp_tree = FPTree(transactions, min_sup)
     #mine patterns from fp-tree
     mined_patterns = mine_patterns(fp_tree.side_table, min_sup)
-    #end time of program execution
+
     run_time_end = time.time()
     #generate output file
     produce_output(mined_patterns, D_name)
