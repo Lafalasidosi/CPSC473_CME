@@ -10,6 +10,7 @@ def main():
     D_name = sys.argv[1]
     if D_name[0] == '.':
         D_name = D_name[2:]     # no file names starting with './'
+    
     #grab the first line from the inputted file to get the number of transactions in a dataset
     transaction_size = int(linecache.getline(D_name, 1))
     #calculate minimum support
@@ -26,12 +27,14 @@ def main():
     mined_patterns = mine_patterns(fp_tree.side_table, min_sup)
 
     run_time_end = time.time()
+
     #generate output file
     produce_output(mined_patterns, D_name)
     #Count how many frequent patterns there are
     count = len(mined_patterns)
     #Total runtime of the program
     total_run_time = run_time_end - run_time_start
+
     #Print frequent patterns found and the total runtime
     print('|FPs| = ' + str(count))
     print(f'Total Runtime: {total_run_time:.3f} sec')
@@ -44,11 +47,14 @@ def produce_output(patterns, D_name):
     output_str = 'MiningResult_{}.txt'.format(input_file_without_extension)
     output_file = open(output_str, 'w')
     count = 0
+    
     print()
+    
     #loop through mined patterns and increment count, write number of frequent patterns to file
     for _ in range(len(patterns)):
         count += 1
     output_file.write("|FPs| = " + str(count) + "\n")
+    
     #write the itemset, and the count to the file
     for n_itemsets, count in patterns.items():
         output_file.write(", ".join(n_itemsets) + " : " + str(count) + "\n")
@@ -80,18 +86,22 @@ class FPTree:
         self.root = FPNode(None, 1, None)
         #a dictionary of all the items in the inputted dataset, and their count
         item_count = defaultdict(int)
+        
         #Loop through all transactions and increment count of item
         for transaction in transactions:
             for item in transaction:
                 item_count[item] += 1
+        
         #Based on MST, add items to frequent_items if its >= MST
         self.frequent_items = {}
         for k,v in item_count.items():
             if v >= min_support:
                 self.frequent_items[k] = v
+        
         # Add elements from frequent_items into the side table.
         for item, count in self.frequent_items.items():
             self.side_table[item] = [count, None]
+        
         #Sort items based on support count. If item is in frequent_items, append it to sorted items and insert it into tree.
         for transaction in transactions:
             sorted_items = []
@@ -120,6 +130,7 @@ class FPTree:
                 while current.next:
                     current = current.next
                 current.next = node.children[first_item]
+        
         #if first item is in the children of node, then it will increment that node item by 1
         else:
             node.children[first_item].increment(1)
