@@ -10,7 +10,6 @@ def main():
     D_name = sys.argv[1]
     if D_name[0] == '.':
         D_name = D_name[2:]     # no file names starting with './'
-    D = open(D_name)
     #grab the first line from the inputted file to get the number of transactions in a dataset
     transaction_size = int(linecache.getline(D_name, 1))
     #calculate minimum support
@@ -33,9 +32,7 @@ def main():
     #generate output file
     produce_output(mined_patterns, D_name)
     #Count how many frequent patterns there are
-    count = 0
-    for _ in range(len(mined_patterns)):
-            count += 1
+    count = len(mined_patterns)
     #Total runtime of the program
     total_run_time = run_time_end - run_time_start
     #Print frequent patterns found and the total runtime
@@ -66,9 +63,9 @@ class FPNode:
         self.item = item
         #support count for item
         self.count = count
-        #parent of node
+
         self.parent = parent
-        #children of node
+
         self.children = {}
         #the next node with the same item
         self.next = None
