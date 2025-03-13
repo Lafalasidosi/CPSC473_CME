@@ -52,8 +52,8 @@ class FPNode:
         #the next node with the same item
         self.next = None
     #increment value of FPNode
-    def increment(self, count):
-        self.count += count
+    def increment(self):
+        self.count += 1
 
 #The FP-tree
 class FPTree:
@@ -112,7 +112,7 @@ class FPTree:
         
         #if first item is in the children of node, then it will increment that node item by 1
         else:
-            node.children[first_item].increment(1)
+            node.children[first_item].increment()
         #Recurse through the tree to add the next item into the fp-tree
         self.insert_tree(node.children[first_item], items[1:])
 
