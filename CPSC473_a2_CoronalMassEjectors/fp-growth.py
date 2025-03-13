@@ -1,8 +1,7 @@
 from math import ceil
 import sys
-from itertools import combinations, islice
+from itertools import islice
 import linecache
-from functools import reduce
 import time
 from collections import defaultdict
 
