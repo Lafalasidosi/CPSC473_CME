@@ -60,28 +60,11 @@ class FPNode:
 #The FP-tree
 class FPTree:
     def __init__(self, transactions, min_support):
-        self.min_support = min_support
-        #Side table to point to nodes
-        self.side_table = {}
-        #Root of tree
         self.root = FPNode(None, 1, None)
-        #a dictionary of all the items in the inputted dataset, and their count
-        item_count = defaultdict(int)
+        item_count = count_items(transactions)
+        self.frequent_items = determine_frequency(item_count, min_support)        
+        self.side_table = create_side_table(self.frequent_items)
         
-        #Loop through all transactions and increment count of item
-        for transaction in transactions:
-            for item in transaction:
-                item_count[item] += 1
-        
-        #Based on MST, add items to frequent_items if its >= MST
-        self.frequent_items = {}
-        for item, count in item_count.items():
-            if count >= min_support:
-                self.frequent_items[item] = count
-        
-        # Add elements from frequent_items into the side table.
-        for item, count in self.frequent_items.items():
-            self.side_table[item] = [count, None]
         
         #Sort items based on support count. If item is in frequent_items, append it to sorted items and insert it into tree.
         for transaction in transactions:
@@ -184,6 +167,35 @@ def text_to_2d_array(filename, base_array):
         for line in islice(file, 1, None):
             row = line.strip().split()
             base_array.append(row[2:])
+
+def count_items(transactions):
+    '''Return a dictionary where a key is an 
+    item from the given list of transactions
+    and its value is the number of transactions
+    the item appears in.'''
+    item_count = defaultdict(int)
+    for transaction in transactions:
+            for item in transaction:
+                item_count[item] += 1
+    return item_count
+
+def determine_frequency(item_count, min_support):
+    '''Filter input dictionary for those keys
+    whose values are at least min_support.'''
+    frequent_items = {}
+    for item, count in item_count.items():
+        if count >= min_support:
+            frequent_items[item] = count
+    return frequent_items
+
+def create_side_table(fr):
+    '''Augment input dict values to include
+    a pointer to a node in what will be
+    an FP-Tree.'''
+    side_table = {}
+    for item, count in fr.items():
+        side_table[item] = [count, None]
+    return side_table
 
 #Start code execution at main method
 if __name__ == '__main__':
