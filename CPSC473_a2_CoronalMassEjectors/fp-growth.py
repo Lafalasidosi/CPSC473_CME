@@ -64,9 +64,9 @@ class FPTree:
         item_count = count_items(transactions)
         self.frequent_items = determine_frequency(item_count, min_support)        
         self.side_table = create_side_table(self.frequent_items)
-        self.build_tree(transactions, item_count)       
+        self.build_tree(transactions)       
         
-    def build_tree(self, transactions, item_count):
+    def build_tree(self, transactions):
     #Sort items based on support count. If item is in frequent_items, append it to sorted items and insert it into tree.
         for transaction in transactions:
             sorted_items = []
