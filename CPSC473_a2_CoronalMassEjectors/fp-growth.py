@@ -73,7 +73,7 @@ class FPTree:
         
         #Based on MST, add items to frequent_items if its >= MST
         self.frequent_items = {}
-        for item,count in item_count.items():
+        for item, count in item_count.items():
             if count >= min_support:
                 self.frequent_items[item] = count
         
