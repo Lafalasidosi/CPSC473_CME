@@ -19,10 +19,7 @@ def main():
     run_time_start = time.time()
     #fp-growth in main memory here
     transactions = []
-    with open(D_name, "r")as file:
-        for line in islice(file, 1, None):
-            row = line.strip().split()
-            transactions.append(row[2:])
+    text_to_2d_array(D_name, transactions)
     #Generate fp-tree
     fp_tree = FPTree(transactions, min_sup)
     #mine patterns from fp-tree
@@ -169,6 +166,13 @@ def build_projected_side_table(transactions, min_support):
     #build projected tree based given transactions and min_support
     projected_tree = FPTree(transactions, min_support)
     return projected_tree.side_table if projected_tree.side_table else None
+
+#helper function to convert inputted dataset/text file into a 2d array
+def text_to_2d_array(filename, base_array):
+    with open(filename, "r")as file:
+        for line in islice(file, 1, None):
+            row = line.strip().split()
+            base_array.append(row[2:])
 
 #Start code execution at main method
 if __name__ == '__main__':
