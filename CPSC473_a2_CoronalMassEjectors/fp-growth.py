@@ -39,26 +39,6 @@ def main():
     print('|FPs| = ' + str(count))
     print(f'Total Runtime: {total_run_time:.3f} sec')
 
-#Produce outputted text file
-def produce_output(patterns, D_name):
-    #Remove extension from file name
-    input_file_without_extension = D_name[:-4]
-    #format for output string for output file
-    output_str = 'MiningResult_{}.txt'.format(input_file_without_extension)
-    output_file = open(output_str, 'w')
-    count = 0
-    
-    print()
-    
-    #loop through mined patterns and increment count, write number of frequent patterns to file
-    for _ in range(len(patterns)):
-        count += 1
-    output_file.write("|FPs| = " + str(count) + "\n")
-    
-    #write the itemset, and the count to the file
-    for n_itemsets, count in patterns.items():
-        output_file.write(", ".join(n_itemsets) + " : " + str(count) + "\n")
-
 #Nodes in an FP-tree
 class FPNode:
     def __init__(self, item, count, parent):
@@ -177,6 +157,27 @@ def build_projected_side_table(transactions, min_support):
     #build projected tree based given transactions and min_support
     projected_tree = FPTree(transactions, min_support)
     return projected_tree.side_table if projected_tree.side_table else None
+
+'''Helper functions'''
+#Produce outputted text file
+def produce_output(patterns, D_name):
+    #Remove extension from file name
+    input_file_without_extension = D_name[:-4]
+    #format for output string for output file
+    output_str = 'MiningResult_{}.txt'.format(input_file_without_extension)
+    output_file = open(output_str, 'w')
+    count = 0
+    
+    print()
+    
+    #loop through mined patterns and increment count, write number of frequent patterns to file
+    for _ in range(len(patterns)):
+        count += 1
+    output_file.write("|FPs| = " + str(count) + "\n")
+    
+    #write the itemset, and the count to the file
+    for n_itemsets, count in patterns.items():
+        output_file.write(", ".join(n_itemsets) + " : " + str(count) + "\n")
 
 #helper function to convert inputted dataset/text file into a 2d array
 def text_to_2d_array(filename, base_array):
