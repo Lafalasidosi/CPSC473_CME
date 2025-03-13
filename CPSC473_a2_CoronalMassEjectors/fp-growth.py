@@ -73,9 +73,9 @@ class FPTree:
         
         #Based on MST, add items to frequent_items if its >= MST
         self.frequent_items = {}
-        for k,v in item_count.items():
-            if v >= min_support:
-                self.frequent_items[k] = v
+        for item,count in item_count.items():
+            if count >= min_support:
+                self.frequent_items[item] = count
         
         # Add elements from frequent_items into the side table.
         for item, count in self.frequent_items.items():
