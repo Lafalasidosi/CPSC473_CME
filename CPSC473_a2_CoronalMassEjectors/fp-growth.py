@@ -18,7 +18,7 @@ def main():
     print('minsup = ' + sys.argv[2] + '% = ' + str(min_sup))
 
     run_time_start = time.time()
-    #fp-growth in main memory here
+
     transactions = []
     text_to_2d_array(D_name, transactions)
     #Generate fp-tree
@@ -37,6 +37,8 @@ def main():
     #Print frequent patterns found and the total runtime
     print('|FPs| = ' + str(len(mined_patterns)))
     print(f'Total Runtime: {total_run_time:.3f} sec')
+
+''' FP-Growth classes and functions '''
 
 #Nodes in an FP-tree
 class FPNode:
