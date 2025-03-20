@@ -1,0 +1,12 @@
+RTSW web plot data - created 2025-03-19 18:42:37
+More information is available from SWPC at http://www.swpc.noaa.gov/products/real-time-solar-wind
+
+Start: 2025-03-13T00:00:00
+End:   2025-03-13T00:00:00
+Source: 0=ACE, 1=DSCOVR, 2=mixed ACE+DSCOVR
+
+Resolution: 5 min
+med=50th percentile (median), min=1st percentile, max=99th percentile
+Phi mean is the average angle, taking into account the wrapping at 0/360 degrees
+
+More data is available from the NCEI archive at https://www.ngdc.noaa.gov/dscovr
